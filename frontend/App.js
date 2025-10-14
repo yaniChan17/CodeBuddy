@@ -4,12 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/auth/LoginScreen';
 import RegisterScreen from './src/screens/auth/RegisterScreen';
 import HomeScreen from './src/screens/posts/HomeScreen';
+import PostDetailScreen from './src/screens/posts/PostDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // Temporarily set isLoggedIn to true for testing
-  const isLoggedIn = true;
+  const isLoggedIn = true; // Temporary for testing
 
   return (
     <NavigationContainer>
@@ -22,6 +22,7 @@ const App = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="PostDetail" component={PostDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
