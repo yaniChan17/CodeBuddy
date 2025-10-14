@@ -1,41 +1,24 @@
-import * as React from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-// Import your screens (now inside src/screens)
-import LoginScreen from './src/screens/LoginScreen';
-import SignupScreen from './src/screens/SignupScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import LoginScreen from './src/screens/auth/LoginScreen';
+import RegisterScreen from './src/screens/auth/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
         screenOptions={{
-          headerStyle: { backgroundColor: '#FF6F00' }, // orange header
-          headerTintColor: '#fff', // white text
-          headerTitleStyle: { fontWeight: 'bold' },
+          headerShown: false,
         }}
       >
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ title: 'Login' }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{ title: 'Sign Up' }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'CodeBuddy' }}
-        />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default App;

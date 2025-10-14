@@ -1,77 +1,141 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
+import Button from '../../components/common/Button';
+import { COLORS, FONTS } from '../../styles/globalStyles';
 
-export default function SignupScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const RegisterScreen = ({ navigation }) => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleRegister = () => {
+    // Will implement Firebase registration later
+    console.log('Register pressed:', formData);
+  };
+
+  const updateFormData = (key, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#aaa"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#aaa"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Join CodeBuddy and start coding together!</Text>
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Home')}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={formData.username}
+            onChangeText={(text) => updateFormData('username', text)}
+            autoCapitalize="none"
+          />
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.link}>Already have an account? Login</Text>
-      </TouchableOpacity>
-    </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={formData.email}
+            onChangeText={(text) => updateFormData('email', text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={formData.password}
+            onChangeText={(text) => updateFormData('password', text)}
+            secureTextEntry
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChangeText={(text) => updateFormData('confirmPassword', text)}
+            secureTextEntry
+          />
+
+          <Button 
+            title="Create Account" 
+            onPress={handleRegister} 
+            style={styles.registerButton}
+          />
+
+          <Button 
+            title="Already have an account? Login" 
+            onPress={() => navigation.navigate('Login')}
+            variant="secondary"
+            style={styles.loginButton}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f3f0', // pastel dirty white
-    padding: 20,
+    backgroundColor: COLORS.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: 24,
+  },
+  header: {
+    marginTop: 48,
+    marginBottom: 32,
   },
   title: {
-    fontSize: 26,
-    fontWeight: '700',
-    marginBottom: 30,
-    color: '#ff6f3c', // pastel orange
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.secondary,
+    marginBottom: 8,
+  },
+  subtitle: {
+    ...FONTS.regular,
+    fontSize: 16,
+    color: '#666',
+  },
+  form: {
+    marginTop: 32,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#fff',
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 15,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: COLORS.lightGray,
+    paddingHorizontal: 16,
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: COLORS.border,
   },
-  button: {
-    backgroundColor: '#ff6f3c',
-    paddingVertical: 12,
-    paddingHorizontal: 50,
-    borderRadius: 10,
-    marginBottom: 15,
+  registerButton: {
+    marginTop: 16,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  link: {
-    color: '#555',
-    marginTop: 10,
+  loginButton: {
+    marginTop: 12,
   },
 });
+
+export default RegisterScreen;
