@@ -108,6 +108,12 @@ const PostDetailScreen = ({ navigation, route }) => {
           
           <Text style={styles.postContent}>{post.content}</Text>
           
+          {/* Photo Placeholder UI */}
+          <View style={styles.photoPlaceholder}>
+            <Text style={styles.photoIcon}>📷</Text>
+            <Text style={styles.photoText}>Photo attachments coming soon</Text>
+          </View>
+          
           <View style={styles.postStats}>
             <View style={styles.voteContainer}>
               <TouchableOpacity style={styles.voteButton}>
@@ -300,6 +306,25 @@ const styles = StyleSheet.create({
     ...FONTS.bold,
     fontSize: 24,
     color: COLORS.primary,
+  },
+  photoPlaceholder: {
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderStyle: 'dashed',
+  },
+  photoIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  photoText: {
+    ...FONTS.regular,
+    fontSize: 14,
+    color: '#999',
   },
 });
 

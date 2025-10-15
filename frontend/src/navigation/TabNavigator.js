@@ -67,7 +67,7 @@ const TabNavigator = ({ navigation }) => {
           tabBarIcon: () => (
             <View style={styles.createButtonContainer}>
               <View style={styles.createButton}>
-                <Text style={styles.createButtonText}>✕</Text>
+                <Text style={styles.createButtonText}>+</Text>
               </View>
             </View>
           ),
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#FFFFFF',
     fontWeight: 'bold',
-    transform: [{ rotate: '45deg' }],
   },
 });
 

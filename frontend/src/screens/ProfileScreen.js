@@ -65,6 +65,11 @@ const ProfileScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Header
         title="Profile"
+        leftIcon={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.backButton}>←</Text>
+          </TouchableOpacity>
+        }
         rightIcon={
           <TouchableOpacity onPress={handleSettings}>
             <Text style={styles.settingsIcon}>⚙️</Text>
@@ -216,6 +221,11 @@ const styles = StyleSheet.create({
   },
   settingsIcon: {
     fontSize: 20,
+  },
+  backButton: {
+    ...FONTS.bold,
+    fontSize: 24,
+    color: COLORS.primary,
   },
 });
 
