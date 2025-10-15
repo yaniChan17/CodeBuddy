@@ -16,9 +16,19 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Sample credentials for testing
+  // Email: demo@codebuddy.com
+  // Password: demo123
+
   const handleLogin = () => {
-    // Will implement Firebase login later
-    console.log('Login pressed:', { email, password });
+    // Temporary login check with sample credentials
+    if (email === 'demo@codebuddy.com' && password === 'demo123') {
+      console.log('Login successful');
+      navigation.navigate('Main');
+    } else {
+      console.log('Invalid credentials');
+      alert('Invalid credentials. Use:\nEmail: demo@codebuddy.com\nPassword: demo123');
+    }
   };
 
   return (
@@ -33,6 +43,12 @@ const LoginScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.form}>
+          <View style={styles.sampleCredentials}>
+            <Text style={styles.sampleTitle}>Sample Login Credentials:</Text>
+            <Text style={styles.sampleText}>Email: demo@codebuddy.com</Text>
+            <Text style={styles.sampleText}>Password: demo123</Text>
+          </View>
+
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -121,6 +137,26 @@ const styles = StyleSheet.create({
   registerHighlight: {
     ...FONTS.medium,
     color: COLORS.primary,
+  },
+  sampleCredentials: {
+    backgroundColor: COLORS.lightGray,
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  sampleTitle: {
+    ...FONTS.medium,
+    fontSize: 14,
+    color: COLORS.secondary,
+    marginBottom: 8,
+  },
+  sampleText: {
+    ...FONTS.regular,
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 4,
   },
 });
 

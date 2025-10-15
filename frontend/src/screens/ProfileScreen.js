@@ -50,7 +50,7 @@ const MOCK_USER_POSTS = [
 
 const ProfileScreen = ({ navigation }) => {
   const handleEditProfile = () => {
-    console.log('Edit profile pressed');
+    navigation.navigate('EditProfile');
   };
 
   const handleSettings = () => {

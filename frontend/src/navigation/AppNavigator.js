@@ -10,13 +10,15 @@ import ChatScreen from '../screens/social/ChatScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingsScreen from '../screens/social/SettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   // For testing, you can change this to true/false
   // In real app, this would come from AuthContext
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   return (
     <Stack.Navigator
@@ -41,6 +43,8 @@ const AppNavigator = () => {
       <Stack.Screen name="Search" component={SearchScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="ProfileTab" component={ProfileScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="UserProfile" component={UserProfileScreen} />
     </Stack.Navigator>
   );
 };

@@ -36,15 +36,40 @@ const MOCK_POSTS = [
 ];
 
 const MOCK_USERS = [
-  { id: '1', username: 'johnDoe', imageUrl: null, status: 'online' },
-  { id: '2', username: 'reactMaster', imageUrl: null, status: 'online' },
-  { id: '3', username: 'codeGuru', imageUrl: null, status: 'offline' },
+  { 
+    id: '1', 
+    username: 'johnDoe', 
+    imageUrl: null, 
+    status: 'online',
+    isFriend: false,
+    email: 'john@example.com',
+    bio: 'Full-stack developer',
+  },
+  { 
+    id: '2', 
+    username: 'reactMaster', 
+    imageUrl: null, 
+    status: 'online',
+    isFriend: false,
+    email: 'react@example.com',
+    bio: 'React Native expert',
+  },
+  { 
+    id: '3', 
+    username: 'codeGuru', 
+    imageUrl: null, 
+    status: 'offline',
+    isFriend: true,
+    email: 'guru@example.com',
+    bio: 'Coding enthusiast',
+  },
 ];
 
 const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('posts'); // 'posts' or 'users'
   const [searchResults, setSearchResults] = useState([]);
+  const [users, setUsers] = useState(MOCK_USERS);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -61,7 +86,7 @@ const SearchScreen = ({ navigation }) => {
         );
         setSearchResults(filtered);
       } else {
-        const filtered = MOCK_USERS.filter((user) =>
+        const filtered = users.filter((user) =>
           user.username.toLowerCase().includes(query.toLowerCase())
         );
         setSearchResults(filtered);
@@ -82,8 +107,29 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const handleUserPress = (user) => {
-    console.log('User pressed:', user);
-    // Navigate to user profile or start chat
+    navigation.navigate('UserProfile', { user });
+  };
+
+  const handleAddFriend = (userId) => {
+    setUsers(prevUsers => 
+      prevUsers.map(user => 
+        user.id === userId 
+          ? { ...user, isFriend: !user.isFriend }
+          : user
+      )
+    );
+    // Update search results if active
+    if (searchQuery.trim()) {
+      setSearchResults(prevResults =>
+        prevResults.map(user =>
+          user.id === userId
+            ? { ...user, isFriend: !user.isFriend }
+            : user
+        )
+      );
+    }
+    const user = users.find(u => u.id === userId);
+    console.log(user?.isFriend ? 'Removed friend:' : 'Added friend:', user?.username);
   };
 
   return (
@@ -177,7 +223,10 @@ const SearchScreen = ({ navigation }) => {
                 username={item.username}
                 imageUrl={item.imageUrl}
                 status={item.status}
+                isFriend={item.isFriend}
+                showAddButton={true}
                 onPress={() => handleUserPress(item)}
+                onAddFriend={() => handleAddFriend(item.id)}
               />
             )
           }
