@@ -108,6 +108,12 @@ const PostDetailScreen = ({ navigation, route }) => {
           
           <Text style={styles.postContent}>{post.content}</Text>
           
+          {/* Photo Placeholder UI */}
+          <View style={styles.photoPlaceholder}>
+            <Text style={styles.photoIcon}>📷</Text>
+            <Text style={styles.photoText}>Photo attachments coming soon</Text>
+          </View>
+          
           <View style={styles.postStats}>
             <View style={styles.voteContainer}>
               <TouchableOpacity style={styles.voteButton}>
@@ -156,13 +162,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   postContainer: {
-    padding: 16,
+    padding: 20,
+    backgroundColor: COLORS.background,
   },
   title: {
     ...FONTS.bold,
-    fontSize: 20,
+    fontSize: 22,
     color: COLORS.secondary,
-    marginBottom: 8,
+    marginBottom: 10,
+    lineHeight: 28,
   },
   authorText: {
     ...FONTS.regular,
@@ -235,10 +243,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   commentContainer: {
-    marginBottom: 16,
-    padding: 12,
+    marginBottom: 12,
+    padding: 14,
     backgroundColor: COLORS.lightGray,
     borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.border,
   },
   commentHeader: {
     flexDirection: 'row',
@@ -300,6 +310,25 @@ const styles = StyleSheet.create({
     ...FONTS.bold,
     fontSize: 24,
     color: COLORS.primary,
+  },
+  photoPlaceholder: {
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderStyle: 'dashed',
+  },
+  photoIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  photoText: {
+    ...FONTS.regular,
+    fontSize: 14,
+    color: '#999',
   },
 });
 
