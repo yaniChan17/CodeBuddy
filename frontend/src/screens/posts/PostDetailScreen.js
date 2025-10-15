@@ -1,3 +1,4 @@
+// src/screens/posts/PostDetailScreen.js
 import React, { useState } from 'react';
 import {
   View,
@@ -19,6 +20,7 @@ const MOCK_COMMENTS = [
     content: 'You can use useEffect hook to handle this case.',
     timestamp: '1h ago',
     upvotes: 8,
+    downvotes: 1,
   },
   {
     id: '2',
@@ -26,26 +28,37 @@ const MOCK_COMMENTS = [
     content: 'Make sure to clean up any subscriptions in the useEffect return function.',
     timestamp: '45m ago',
     upvotes: 5,
+    downvotes: 0,
   },
 ];
 
-const Comment = ({ comment }) => (
-  <View style={styles.commentContainer}>
-    <View style={styles.commentHeader}>
-      <Text style={styles.commentAuthor}>@{comment.author}</Text>
-      <Text style={styles.commentTime}>{comment.timestamp}</Text>
+const Comment = ({ comment }) => {
+  const netVotes = comment.upvotes - comment.downvotes;
+  
+  return (
+    <View style={styles.commentContainer}>
+      <View style={styles.commentHeader}>
+        <Text style={styles.commentAuthor}>@{comment.author}</Text>
+        <Text style={styles.commentTime}>{comment.timestamp}</Text>
+      </View>
+      <Text style={styles.commentContent}>{comment.content}</Text>
+      <View style={styles.commentFooter}>
+        <View style={styles.voteContainer}>
+          <TouchableOpacity style={styles.voteButton}>
+            <Text style={styles.upvoteText}>🔺</Text>
+          </TouchableOpacity>
+          <Text style={styles.voteCount}>{netVotes}</Text>
+          <TouchableOpacity style={styles.voteButton}>
+            <Text style={styles.downvoteText}>🔻</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.replyText}>Reply</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-    <Text style={styles.commentContent}>{comment.content}</Text>
-    <View style={styles.commentFooter}>
-      <TouchableOpacity style={styles.upvoteButton}>
-        <Text style={styles.upvoteText}>🔺 {comment.upvotes}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.replyText}>Reply</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  );
+};
 
 const PostDetailScreen = ({ navigation, route }) => {
   const [newComment, setNewComment] = useState('');
@@ -56,8 +69,11 @@ const PostDetailScreen = ({ navigation, route }) => {
     content: 'I\'m new to React Native and trying to understand how to properly implement useState. Can someone explain the best practices and common pitfalls to avoid?',
     tags: ['React Native', 'Hooks'],
     upvotes: 25,
+    downvotes: 2,
     timestamp: '2h ago',
   };
+
+  const netVotes = post.upvotes - post.downvotes;
 
   const handleSubmitComment = () => {
     if (newComment.trim()) {
@@ -90,17 +106,23 @@ const PostDetailScreen = ({ navigation, route }) => {
             ))}
           </View>
           
-          <Text style={styles.content}>{post.content}</Text>
+          <Text style={styles.postContent}>{post.content}</Text>
           
           <View style={styles.postStats}>
-            <TouchableOpacity style={styles.upvoteButton}>
-              <Text style={styles.upvoteText}>🔺 {post.upvotes}</Text>
-            </TouchableOpacity>
+            <View style={styles.voteContainer}>
+              <TouchableOpacity style={styles.voteButton}>
+                <Text style={styles.upvoteIcon}>🔺</Text>
+              </TouchableOpacity>
+              <Text style={styles.voteCount}>{netVotes}</Text>
+              <TouchableOpacity style={styles.voteButton}>
+                <Text style={styles.downvoteIcon}>🔻</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
         <View style={styles.commentsSection}>
-          <Text style={styles.commentsHeader}>Comments</Text>
+          <Text style={styles.commentsHeader}>Comments ({MOCK_COMMENTS.length})</Text>
           {MOCK_COMMENTS.map(comment => (
             <Comment key={comment.id} comment={comment} />
           ))}
@@ -166,13 +188,40 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.secondary,
   },
+  postContent: {
+    ...FONTS.regular,
+    fontSize: 16,
+    color: COLORS.secondary,
+    lineHeight: 24,
+    marginBottom: 16,
+  },
   postStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
+  },
+  voteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  voteButton: {
+    padding: 8,
+  },
+  upvoteIcon: {
+    fontSize: 20,
+  },
+  downvoteIcon: {
+    fontSize: 20,
+  },
+  voteCount: {
+    ...FONTS.medium,
+    fontSize: 18,
+    color: COLORS.secondary,
+    marginHorizontal: 12,
+    minWidth: 40,
+    textAlign: 'center',
   },
   commentsSection: {
     padding: 16,
@@ -215,14 +264,13 @@ const styles = StyleSheet.create({
   commentFooter: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  upvoteButton: {
-    marginRight: 16,
+    justifyContent: 'space-between',
   },
   upvoteText: {
-    ...FONTS.medium,
     fontSize: 14,
-    color: '#666',
+  },
+  downvoteText: {
+    fontSize: 14,
   },
   replyText: {
     ...FONTS.medium,

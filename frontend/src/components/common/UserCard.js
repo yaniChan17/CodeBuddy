@@ -12,7 +12,7 @@ const UserCard = ({
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.avatarContainer}>
         <Image 
-          source={imageUrl ? { uri: imageUrl } : require('../../assets/user_default.png')}
+          source={imageUrl ? { uri: imageUrl } : require('../../../assets/lable.jpg')}
           style={styles.avatar}
         />
         <View 
