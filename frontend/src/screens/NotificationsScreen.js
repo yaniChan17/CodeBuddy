@@ -106,8 +106,6 @@ const NotificationItem = ({ notification, onPress }) => {
         </Text>
         <Text style={styles.timestamp}>{notification.timestamp}</Text>
       </View>
-
-      {!notification.read && <View style={styles.unreadDot} />}
     </TouchableOpacity>
   );
 };
@@ -166,7 +164,7 @@ const NotificationsScreen = ({ navigation }) => {
               filter === 'unread' && styles.activeFilterText,
             ]}
           >
-            Unread ({unreadCount})
+            Unread
           </Text>
         </TouchableOpacity>
       </View>
@@ -278,14 +276,6 @@ const styles = StyleSheet.create({
     ...FONTS.regular,
     fontSize: 12,
     color: '#999',
-  },
-  unreadDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.primary,
-    marginLeft: 8,
-    marginTop: 4,
   },
   emptyContainer: {
     flex: 1,

@@ -29,10 +29,12 @@ const SettingsSection = ({ title, children }) => (
   </View>
 );
 
+import { useTheme } from '../../context/ThemeContext';
+
 const SettingsScreen = ({ navigation }) => {
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [showOnlineStatus, setShowOnlineStatus] = useState(true);
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     Alert.alert(
@@ -84,7 +86,7 @@ const SettingsScreen = ({ navigation }) => {
           <SettingItem
             title="Edit Profile"
             subtitle="Change your name, bio, and avatar"
-            onPress={() => console.log('Edit profile')}
+            onPress={() => navigation.navigate('EditProfile')}
             rightElement={<Text style={styles.arrow}>›</Text>}
           />
           <SettingItem
@@ -117,14 +119,13 @@ const SettingsScreen = ({ navigation }) => {
           />
           <SettingItem
             title="Dark Mode"
-            subtitle="Coming soon"
+            subtitle="Switch between light and dark theme"
             rightElement={
               <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
+                value={isDarkMode}
+                onValueChange={toggleTheme}
                 trackColor={{ false: '#ccc', true: COLORS.primary }}
                 thumbColor="#fff"
-                disabled
               />
             }
           />

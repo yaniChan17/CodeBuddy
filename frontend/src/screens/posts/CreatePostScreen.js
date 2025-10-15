@@ -22,6 +22,7 @@ const CreatePostScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
+  const [hasPhoto, setHasPhoto] = useState(false);
 
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -31,9 +32,15 @@ const CreatePostScreen = ({ navigation }) => {
     }
   };
 
+  const handlePhotoAttach = () => {
+    // Photo upload functionality will be implemented in the future
+    setHasPhoto(!hasPhoto);
+    console.log('Photo attach toggled:', !hasPhoto);
+  };
+
   const handleSubmit = () => {
     // Will implement Firebase post creation later
-    console.log('New post:', { title, content, selectedTags });
+    console.log('New post:', { title, content, selectedTags, hasPhoto });
     navigation.goBack();
   };
 
@@ -92,6 +99,23 @@ const CreatePostScreen = ({ navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
+
+          <Text style={styles.label}>Attachments</Text>
+          <TouchableOpacity 
+            style={styles.photoButton}
+            onPress={handlePhotoAttach}
+          >
+            <Text style={styles.photoIcon}>📷</Text>
+            <View style={styles.photoButtonContent}>
+              <Text style={styles.photoButtonText}>
+                {hasPhoto ? 'Photo attached (placeholder)' : 'Attach Photo'}
+              </Text>
+              <Text style={styles.photoButtonSubtext}>
+                {hasPhoto ? 'Tap to remove' : 'Full upload coming soon'}
+              </Text>
+            </View>
+            {hasPhoto && <Text style={styles.checkmark}>✓</Text>}
+          </TouchableOpacity>
 
           <View style={styles.tipContainer}>
             <Text style={styles.tipTitle}>Tips for a good question:</Text>
@@ -231,6 +255,38 @@ const styles = StyleSheet.create({
   },
   backButton: {
     ...FONTS.bold,
+    fontSize: 24,
+    color: COLORS.primary,
+  },
+  photoButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    marginTop: 8,
+  },
+  photoIcon: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  photoButtonContent: {
+    flex: 1,
+  },
+  photoButtonText: {
+    ...FONTS.medium,
+    fontSize: 16,
+    color: COLORS.secondary,
+    marginBottom: 2,
+  },
+  photoButtonSubtext: {
+    ...FONTS.regular,
+    fontSize: 12,
+    color: '#666',
+  },
+  checkmark: {
     fontSize: 24,
     color: COLORS.primary,
   },
