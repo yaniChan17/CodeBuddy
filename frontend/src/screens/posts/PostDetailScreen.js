@@ -162,13 +162,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   postContainer: {
-    padding: 16,
+    padding: 20,
+    backgroundColor: COLORS.background,
   },
   title: {
     ...FONTS.bold,
-    fontSize: 20,
+    fontSize: 22,
     color: COLORS.secondary,
-    marginBottom: 8,
+    marginBottom: 10,
+    lineHeight: 28,
   },
   authorText: {
     ...FONTS.regular,
@@ -241,10 +243,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   commentContainer: {
-    marginBottom: 16,
-    padding: 12,
+    marginBottom: 12,
+    padding: 14,
     backgroundColor: COLORS.lightGray,
     borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.border,
   },
   commentHeader: {
     flexDirection: 'row',

@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   titleInput: {
-    height: 48,
+    height: 52,
     borderRadius: 8,
     backgroundColor: COLORS.lightGray,
     paddingHorizontal: 16,
@@ -145,6 +145,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     ...FONTS.regular,
     fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   charCount: {
     ...FONTS.regular,
@@ -162,6 +167,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     ...FONTS.regular,
     fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   tagsContainer: {
     flexDirection: 'row',

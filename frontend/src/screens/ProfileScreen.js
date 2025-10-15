@@ -139,14 +139,18 @@ const styles = StyleSheet.create({
   profileHeader: {
     alignItems: 'center',
     padding: 24,
+    paddingTop: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
+    backgroundColor: COLORS.background,
   },
   avatar: {
     width: 100,
     height: 100,
     borderRadius: 50,
     marginBottom: 16,
+    borderWidth: 3,
+    borderColor: COLORS.primary,
   },
   username: {
     ...FONTS.bold,
@@ -177,8 +181,13 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: 32,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingVertical: 12,
+    borderRadius: 24,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   editButtonText: {
     ...FONTS.medium,
@@ -188,9 +197,11 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 24,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
+    backgroundColor: COLORS.lightGray,
   },
   statItem: {
     alignItems: 'center',
