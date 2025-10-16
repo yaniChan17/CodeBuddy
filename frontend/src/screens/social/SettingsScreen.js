@@ -8,8 +8,9 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  StatusBar,
 } from 'react-native';
-import Header from '../../components/common/Header';
+import { useTheme } from '../../context/ThemeContext';
 import { COLORS, FONTS } from '../../styles/globalStyles';
 
 const SettingItem = ({ title, subtitle, onPress, rightElement }) => (
@@ -25,11 +26,11 @@ const SettingItem = ({ title, subtitle, onPress, rightElement }) => (
 const SettingsSection = ({ title, children }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>
-    {children}
+    <View style={styles.sectionContent}>
+      {children}
+    </View>
   </View>
 );
-
-import { useTheme } from '../../context/ThemeContext';
 
 const SettingsScreen = ({ navigation }) => {
   const [notifications, setNotifications] = useState(true);
@@ -57,7 +58,7 @@ const SettingsScreen = ({ navigation }) => {
   const handleDeleteAccount = () => {
     Alert.alert(
       'Delete Account',
-      'This action cannot be undone. Are you sure?',
+      'This action cannot be undone. Are you sure you want to permanently delete your account?',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -71,28 +72,33 @@ const SettingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Settings"
-        leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-        }
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Settings</Text>
+        <View style={styles.placeholder} />
+      </View>
 
       <ScrollView>
         {/* Account Settings */}
-        <SettingsSection title="Account">
+        <SettingsSection title="ACCOUNT SETTINGS">
           <SettingItem
             title="Edit Profile"
-            subtitle="Change your name, bio, and avatar"
+            subtitle="Change your display name, username, and bio"
             onPress={() => navigation.navigate('EditProfile')}
             rightElement={<Text style={styles.arrow}>›</Text>}
           />
           <SettingItem
-            title="Change Password"
-            subtitle="Update your password"
-            onPress={() => console.log('Change password')}
+            title="Account"
+            subtitle="Manage email and password"
+            onPress={() => navigation.navigate('Account')}
             rightElement={<Text style={styles.arrow}>›</Text>}
           />
           <SettingItem
@@ -101,10 +107,13 @@ const SettingsScreen = ({ navigation }) => {
             onPress={() => console.log('Privacy settings')}
             rightElement={<Text style={styles.arrow}>›</Text>}
           />
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAccount}>
+            <Text style={styles.deleteButtonText}>Delete Account</Text>
+          </TouchableOpacity>
         </SettingsSection>
 
         {/* Preferences */}
-        <SettingsSection title="Preferences">
+        <SettingsSection title="PREFERENCES">
           <SettingItem
             title="Notifications"
             subtitle="Push notifications for messages and replies"
@@ -119,7 +128,7 @@ const SettingsScreen = ({ navigation }) => {
           />
           <SettingItem
             title="Dark Mode"
-            subtitle="Switch between light and dark theme"
+            subtitle={isDarkMode ? 'Dark theme enabled' : 'Light theme enabled'}
             rightElement={
               <Switch
                 value={isDarkMode}
@@ -144,7 +153,7 @@ const SettingsScreen = ({ navigation }) => {
         </SettingsSection>
 
         {/* Support */}
-        <SettingsSection title="Support">
+        <SettingsSection title="SUPPORT">
           <SettingItem
             title="Help Center"
             onPress={() => console.log('Help center')}
@@ -163,18 +172,12 @@ const SettingsScreen = ({ navigation }) => {
           />
         </SettingsSection>
 
-        {/* Danger Zone */}
-        <SettingsSection title="Danger Zone">
-          <TouchableOpacity style={styles.dangerButton} onPress={handleLogout}>
-            <Text style={styles.dangerButtonText}>Logout</Text>
+        {/* Logout */}
+        <View style={styles.logoutSection}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.dangerButton, styles.deleteButton]}
-            onPress={handleDeleteAccount}
-          >
-            <Text style={styles.dangerButtonText}>Delete Account</Text>
-          </TouchableOpacity>
-        </SettingsSection>
+        </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>CodeBuddy © 2024</Text>
@@ -188,26 +191,66 @@ const SettingsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.lightGray,
+  },
+  header: {
+    height: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
     backgroundColor: COLORS.background,
+    paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  backIcon: {
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 18,
+    color: COLORS.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
   },
   section: {
     marginTop: 24,
   },
   sectionTitle: {
     ...FONTS.medium,
-    fontSize: 14,
-    color: '#999',
+    fontSize: 13,
+    color: '#65676B',
     marginLeft: 16,
     marginBottom: 8,
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  sectionContent: {
+    backgroundColor: COLORS.background,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: COLORS.border,
   },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -223,7 +266,7 @@ const styles = StyleSheet.create({
   settingSubtitle: {
     ...FONTS.regular,
     fontSize: 13,
-    color: '#666',
+    color: '#65676B',
   },
   settingRight: {
     marginLeft: 16,
@@ -233,16 +276,27 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#ccc',
   },
-  dangerButton: {
-    padding: 16,
-    backgroundColor: COLORS.background,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
   deleteButton: {
+    padding: 16,
     borderBottomWidth: 0,
   },
-  dangerButtonText: {
+  deleteButtonText: {
+    ...FONTS.medium,
+    fontSize: 16,
+    color: COLORS.error,
+  },
+  logoutSection: {
+    marginTop: 24,
+    backgroundColor: COLORS.background,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: COLORS.border,
+  },
+  logoutButton: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  logoutButtonText: {
     ...FONTS.medium,
     fontSize: 16,
     color: COLORS.error,
@@ -261,11 +315,6 @@ const styles = StyleSheet.create({
     ...FONTS.regular,
     fontSize: 12,
     color: '#ccc',
-  },
-  backButton: {
-    ...FONTS.bold,
-    fontSize: 24,
-    color: COLORS.primary,
   },
 });
 

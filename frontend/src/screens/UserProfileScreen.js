@@ -7,12 +7,11 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
-import Header from '../components/common/Header';
 import PostCard from '../components/posts/PostCard';
 import { COLORS, FONTS } from '../styles/globalStyles';
 
-// Mock user posts
 const MOCK_USER_POSTS = [
   {
     id: '1',
@@ -20,6 +19,7 @@ const MOCK_USER_POSTS = [
     author: 'user',
     tags: ['React Native', 'Hooks'],
     upvotes: 15,
+    downvotes: 2,
     comments: 7,
     timestamp: '3h ago',
   },
@@ -47,35 +47,44 @@ const UserProfileScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Profile"
-        leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-        }
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Profile</Text>
+        <View style={styles.placeholder} />
+      </View>
 
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <Image
             source={user.imageUrl ? { uri: user.imageUrl } : require('../../assets/lable.jpg')}
             style={styles.avatar}
           />
+          <Text style={styles.displayName}>
+            {user.displayName || user.username}
+          </Text>
           <Text style={styles.username}>@{user.username}</Text>
-          <Text style={styles.email}>{user.email || 'user@example.com'}</Text>
-          <Text style={styles.bio}>{user.bio || 'Coding enthusiast | Always learning'}</Text>
+          <Text style={styles.bio}>
+            {user.bio || 'Coding enthusiast | Always learning'}
+          </Text>
           
           <View style={styles.statusContainer}>
             <View 
               style={[
                 styles.statusDot, 
-                { backgroundColor: user.status === 'online' ? '#4CAF50' : '#9E9E9E' }
+                { backgroundColor: user.status === 'online' ? '#31A24C' : '#9E9E9E' }
               ]} 
             />
             <Text style={styles.statusText}>
-              {user.status === 'online' ? 'Online' : 'Offline'}
+              {user.status === 'online' ? 'Active now' : 'Offline'}
             </Text>
           </View>
 
@@ -129,6 +138,7 @@ const UserProfileScreen = ({ navigation, route }) => {
             ))
           ) : (
             <View style={styles.emptyPosts}>
+              <Text style={styles.emptyIcon}>📭</Text>
               <Text style={styles.emptyText}>No posts yet</Text>
             </View>
           )}
@@ -141,15 +151,54 @@ const UserProfileScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.lightGray,
+  },
+  header: {
+    height: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
     backgroundColor: COLORS.background,
+    paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  backIcon: {
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 18,
+    color: COLORS.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
+  },
+  scrollContent: {
+    paddingBottom: 100,
   },
   profileHeader: {
     alignItems: 'center',
     padding: 24,
     paddingTop: 16,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.background,
   },
   avatar: {
     width: 100,
@@ -159,25 +208,26 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: COLORS.primary,
   },
-  username: {
+  displayName: {
     ...FONTS.bold,
     fontSize: 22,
     color: COLORS.secondary,
     marginBottom: 4,
   },
-  email: {
+  username: {
     ...FONTS.regular,
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#65676B',
     marginBottom: 12,
   },
   bio: {
     ...FONTS.regular,
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.secondary,
     textAlign: 'center',
     marginBottom: 12,
     paddingHorizontal: 16,
+    lineHeight: 21,
   },
   statusContainer: {
     flexDirection: 'row',
@@ -193,7 +243,7 @@ const styles = StyleSheet.create({
   statusText: {
     ...FONTS.regular,
     fontSize: 14,
-    color: '#666',
+    color: '#65676B',
   },
   actionButtons: {
     flexDirection: 'row',
@@ -242,9 +292,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingVertical: 24,
     paddingHorizontal: 16,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.lightGray,
   },
   statItem: {
     alignItems: 'center',
@@ -258,7 +308,7 @@ const styles = StyleSheet.create({
   statLabel: {
     ...FONTS.regular,
     fontSize: 14,
-    color: '#666',
+    color: '#65676B',
   },
   statDivider: {
     width: 1,
@@ -268,24 +318,23 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   sectionTitle: {
-    ...FONTS.medium,
-    fontSize: 18,
+    ...FONTS.bold,
+    fontSize: 17,
     color: COLORS.secondary,
     marginBottom: 16,
   },
   emptyPosts: {
-    padding: 24,
+    padding: 40,
     alignItems: 'center',
+  },
+  emptyIcon: {
+    fontSize: 48,
+    marginBottom: 8,
   },
   emptyText: {
     ...FONTS.regular,
-    fontSize: 14,
-    color: '#666',
-  },
-  backButton: {
-    ...FONTS.bold,
-    fontSize: 24,
-    color: COLORS.primary,
+    fontSize: 15,
+    color: '#65676B',
   },
 });
 

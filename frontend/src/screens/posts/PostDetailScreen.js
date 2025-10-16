@@ -7,12 +7,12 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
-import Header from '../../components/common/Header';
 import Button from '../../components/common/Button';
 import { COLORS, FONTS } from '../../styles/globalStyles';
 
-// Temporary mock data for a single post
+// Temporary mock data
 const MOCK_COMMENTS = [
   {
     id: '1',
@@ -62,11 +62,10 @@ const Comment = ({ comment }) => {
 
 const PostDetailScreen = ({ navigation, route }) => {
   const [newComment, setNewComment] = useState('');
-  // In a real app, we'd get this from route.params.post
   const post = {
     title: 'How to implement useState in React Native?',
     author: 'johnDoe',
-    content: 'I\'m new to React Native and trying to understand how to properly implement useState. Can someone explain the best practices and common pitfalls to avoid?',
+    content: "I'm new to React Native and trying to understand how to properly implement useState. Can someone explain the best practices and common pitfalls to avoid?",
     tags: ['React Native', 'Hooks'],
     upvotes: 25,
     downvotes: 2,
@@ -84,19 +83,26 @@ const PostDetailScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Post Detail"
-        leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-        }
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Post</Text>
+        <View style={styles.placeholder} />
+      </View>
       
       <ScrollView style={styles.content}>
         <View style={styles.postContainer}>
           <Text style={styles.title}>{post.title}</Text>
-          <Text style={styles.authorText}>Posted by @{post.author} • {post.timestamp}</Text>
+          <Text style={styles.authorText}>
+            Posted by @{post.author} • {post.timestamp}
+          </Text>
           
           <View style={styles.tagsContainer}>
             {post.tags.map((tag, index) => (
@@ -107,12 +113,6 @@ const PostDetailScreen = ({ navigation, route }) => {
           </View>
           
           <Text style={styles.postContent}>{post.content}</Text>
-          
-          {/* Photo Placeholder UI */}
-          <View style={styles.photoPlaceholder}>
-            <Text style={styles.photoIcon}>📷</Text>
-            <Text style={styles.photoText}>Photo attachments coming soon</Text>
-          </View>
           
           <View style={styles.postStats}>
             <View style={styles.voteContainer}>
@@ -128,7 +128,9 @@ const PostDetailScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.commentsSection}>
-          <Text style={styles.commentsHeader}>Comments ({MOCK_COMMENTS.length})</Text>
+          <Text style={styles.commentsHeader}>
+            Comments ({MOCK_COMMENTS.length})
+          </Text>
           {MOCK_COMMENTS.map(comment => (
             <Comment key={comment.id} comment={comment} />
           ))}
@@ -139,6 +141,7 @@ const PostDetailScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.commentInput}
           placeholder="Add a comment..."
+          placeholderTextColor="#B0B3B8"
           value={newComment}
           onChangeText={setNewComment}
           multiline
@@ -158,12 +161,50 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  header: {
+    height: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    backgroundColor: COLORS.background,
+    paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  backIcon: {
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 18,
+    color: COLORS.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
+  },
   content: {
     flex: 1,
   },
   postContainer: {
     padding: 20,
     backgroundColor: COLORS.background,
+    borderBottomWidth: 8,
+    borderBottomColor: COLORS.lightGray,
   },
   title: {
     ...FONTS.bold,
@@ -174,8 +215,8 @@ const styles = StyleSheet.create({
   },
   authorText: {
     ...FONTS.regular,
-    fontSize: 14,
-    color: '#666',
+    fontSize: 13,
+    color: '#65676B',
     marginBottom: 12,
   },
   tagsContainer: {
@@ -184,17 +225,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   tag: {
-    backgroundColor: COLORS.lightGray,
+    backgroundColor: '#FFE8DC',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 5,
     marginRight: 8,
     marginBottom: 8,
   },
   tagText: {
-    ...FONTS.regular,
+    ...FONTS.medium,
     fontSize: 12,
-    color: COLORS.secondary,
+    color: COLORS.primary,
   },
   postContent: {
     ...FONTS.regular,
@@ -208,11 +249,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: '#E4E6EB',
   },
   voteContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 20,
+    paddingHorizontal: 8,
   },
   voteButton: {
     padding: 8,
@@ -224,21 +268,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   voteCount: {
-    ...FONTS.medium,
-    fontSize: 18,
+    ...FONTS.bold,
+    fontSize: 16,
     color: COLORS.secondary,
     marginHorizontal: 12,
-    minWidth: 40,
+    minWidth: 35,
     textAlign: 'center',
   },
   commentsSection: {
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    backgroundColor: COLORS.background,
   },
   commentsHeader: {
-    ...FONTS.medium,
-    fontSize: 18,
+    ...FONTS.bold,
+    fontSize: 17,
     color: COLORS.secondary,
     marginBottom: 16,
   },
@@ -246,9 +289,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 14,
     backgroundColor: COLORS.lightGray,
-    borderRadius: 8,
+    borderRadius: 12,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.border,
+    borderLeftColor: COLORS.primary,
   },
   commentHeader: {
     flexDirection: 'row',
@@ -257,19 +300,20 @@ const styles = StyleSheet.create({
   },
   commentAuthor: {
     ...FONTS.medium,
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.secondary,
   },
   commentTime: {
     ...FONTS.regular,
     fontSize: 12,
-    color: '#666',
+    color: '#65676B',
   },
   commentContent: {
     ...FONTS.regular,
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.secondary,
-    marginBottom: 8,
+    lineHeight: 21,
+    marginBottom: 10,
   },
   commentFooter: {
     flexDirection: 'row',
@@ -293,42 +337,24 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.border,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: COLORS.background,
   },
   commentInput: {
     flex: 1,
-    height: 40,
+    minHeight: 40,
+    maxHeight: 80,
     backgroundColor: COLORS.lightGray,
     borderRadius: 20,
     paddingHorizontal: 16,
+    paddingVertical: 10,
     marginRight: 8,
+    ...FONTS.regular,
+    fontSize: 15,
+    color: COLORS.secondary,
   },
   postButton: {
     height: 40,
-    paddingHorizontal: 16,
-  },
-  backButton: {
-    ...FONTS.bold,
-    fontSize: 24,
-    color: COLORS.primary,
-  },
-  photoPlaceholder: {
-    backgroundColor: COLORS.lightGray,
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderStyle: 'dashed',
-  },
-  photoIcon: {
-    fontSize: 32,
-    marginBottom: 8,
-  },
-  photoText: {
-    ...FONTS.regular,
-    fontSize: 14,
-    color: '#999',
+    paddingHorizontal: 20,
   },
 });
 

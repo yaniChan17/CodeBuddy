@@ -59,7 +59,7 @@ const TabNavigator = ({ navigation }) => {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate('CreatePost');
+            navigation.getParent()?.navigate('CreatePost');
           },
         })}
         options={{

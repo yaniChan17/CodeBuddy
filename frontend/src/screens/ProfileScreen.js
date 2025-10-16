@@ -7,15 +7,14 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
-import Header from '../components/common/Header';
 import PostCard from '../components/posts/PostCard';
 import { COLORS, FONTS } from '../styles/globalStyles';
 
-// Mock user data
 const MOCK_USER = {
+  displayName: 'John Doe',
   username: 'johnDoe',
-  email: 'john@example.com',
   avatar: null,
   bio: 'Full-stack developer | React Native enthusiast | Always learning',
   joinedDate: 'Jan 2024',
@@ -26,7 +25,6 @@ const MOCK_USER = {
   },
 };
 
-// Mock user posts
 const MOCK_USER_POSTS = [
   {
     id: '1',
@@ -34,6 +32,7 @@ const MOCK_USER_POSTS = [
     author: 'johnDoe',
     tags: ['React Native', 'Hooks'],
     upvotes: 25,
+    downvotes: 2,
     comments: 12,
     timestamp: '2h ago',
   },
@@ -43,6 +42,7 @@ const MOCK_USER_POSTS = [
     author: 'johnDoe',
     tags: ['Firebase', 'Auth'],
     upvotes: 18,
+    downvotes: 1,
     comments: 8,
     timestamp: '1d ago',
   },
@@ -63,29 +63,31 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Profile"
-        leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-        }
-        rightIcon={
-          <TouchableOpacity onPress={handleSettings}>
-            <Text style={styles.settingsIcon}>⚙️</Text>
-          </TouchableOpacity>
-        }
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Profile</Text>
+        <TouchableOpacity style={styles.settingsButton} onPress={handleSettings}>
+          <Text style={styles.settingsIcon}>⚙️</Text>
+        </TouchableOpacity>
+      </View>
 
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <Image
             source={MOCK_USER.avatar || require('../../assets/lable.jpg')}
             style={styles.avatar}
           />
+          <Text style={styles.displayName}>{MOCK_USER.displayName}</Text>
           <Text style={styles.username}>@{MOCK_USER.username}</Text>
-          <Text style={styles.email}>{MOCK_USER.email}</Text>
           <Text style={styles.bio}>{MOCK_USER.bio}</Text>
           <Text style={styles.joinedDate}>Joined {MOCK_USER.joinedDate}</Text>
 
@@ -134,15 +136,62 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.lightGray,
+  },
+  header: {
+    height: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
     backgroundColor: COLORS.background,
+    paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  backIcon: {
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 18,
+    color: COLORS.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  settingsButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.lightGray,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  settingsIcon: {
+    fontSize: 18,
+  },
+  scrollContent: {
+    paddingBottom: 100,
   },
   profileHeader: {
     alignItems: 'center',
     padding: 24,
     paddingTop: 16,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.background,
   },
   avatar: {
     width: 100,
@@ -152,30 +201,31 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: COLORS.primary,
   },
-  username: {
+  displayName: {
     ...FONTS.bold,
     fontSize: 22,
     color: COLORS.secondary,
     marginBottom: 4,
   },
-  email: {
+  username: {
     ...FONTS.regular,
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#65676B',
     marginBottom: 12,
   },
   bio: {
     ...FONTS.regular,
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.secondary,
     textAlign: 'center',
     marginBottom: 8,
     paddingHorizontal: 16,
+    lineHeight: 21,
   },
   joinedDate: {
     ...FONTS.regular,
-    fontSize: 12,
-    color: '#999',
+    fontSize: 13,
+    color: '#B0B3B8',
     marginBottom: 16,
   },
   editButton: {
@@ -191,7 +241,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     ...FONTS.medium,
-    fontSize: 14,
+    fontSize: 15,
     color: '#FFFFFF',
   },
   statsContainer: {
@@ -199,9 +249,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingVertical: 24,
     paddingHorizontal: 16,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.lightGray,
   },
   statItem: {
     alignItems: 'center',
@@ -215,7 +265,7 @@ const styles = StyleSheet.create({
   statLabel: {
     ...FONTS.regular,
     fontSize: 14,
-    color: '#666',
+    color: '#65676B',
   },
   statDivider: {
     width: 1,
@@ -225,18 +275,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   sectionTitle: {
-    ...FONTS.medium,
-    fontSize: 18,
+    ...FONTS.bold,
+    fontSize: 17,
     color: COLORS.secondary,
     marginBottom: 16,
-  },
-  settingsIcon: {
-    fontSize: 20,
-  },
-  backButton: {
-    ...FONTS.bold,
-    fontSize: 24,
-    color: COLORS.primary,
   },
 });
 

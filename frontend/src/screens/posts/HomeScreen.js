@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Image,
+  StatusBar,
 } from 'react-native';
 import { COLORS, FONTS } from '../../styles/globalStyles';
 
@@ -99,26 +100,30 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Custom Header */}
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Facebook-style Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.profileButton}
-          onPress={handleProfilePress}
-        >
-          <Image
-            source={require('../../../assets/lable.jpg')}
-            style={styles.profileAvatar}
-          />
-        </TouchableOpacity>
-
         <Text style={styles.headerTitle}>CodeBuddy</Text>
-
-        <TouchableOpacity
-          style={styles.searchButton}
-          onPress={handleSearchPress}
-        >
-          <Text style={styles.searchIcon}>🔍</Text>
-        </TouchableOpacity>
+        
+        <View style={styles.headerIcons}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={handleSearchPress}
+          >
+            <Text style={styles.searchIcon}>🔍</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={handleProfilePress}
+          >
+            <Image
+              source={require('../../../assets/lable.jpg')}
+              style={styles.profileAvatar}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
@@ -143,7 +148,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.lightGray,
   },
   header: {
     height: 110,
@@ -151,15 +156,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
     backgroundColor: COLORS.background,
     paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 24,
+    color: COLORS.primary,
+    letterSpacing: -0.5,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.lightGray,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchIcon: {
+    fontSize: 18,
   },
   profileButton: {
     width: 40,
@@ -172,39 +199,23 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.primary,
   },
-  headerTitle: {
-    ...FONTS.bold,
-    fontSize: 20,
-    color: COLORS.primary,
-    flex: 1,
-    textAlign: 'center',
-  },
-  searchButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchIcon: {
-    fontSize: 20,
-  },
   listContainer: {
     padding: 8,
     paddingBottom: 100,
   },
   postCard: {
     backgroundColor: COLORS.background,
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 16,
     marginHorizontal: 8,
-    marginVertical: 4,
+    marginVertical: 6,
     borderWidth: 1,
     borderColor: COLORS.border,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
   postHeader: {
     marginBottom: 12,
@@ -214,12 +225,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: COLORS.secondary,
     marginBottom: 6,
-    lineHeight: 22,
+    lineHeight: 23,
   },
   authorText: {
     ...FONTS.regular,
-    fontSize: 12,
-    color: '#666',
+    fontSize: 13,
+    color: '#65676B',
   },
   tagsContainer: {
     flexDirection: 'row',
@@ -227,26 +238,32 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   tag: {
-    backgroundColor: COLORS.lightGray,
+    backgroundColor: '#FFE8DC',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 5,
     marginRight: 8,
     marginBottom: 8,
   },
   tagText: {
-    ...FONTS.regular,
+    ...FONTS.medium,
     fontSize: 12,
-    color: COLORS.secondary,
+    color: COLORS.primary,
   },
   postFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#E4E6EB',
   },
   voteContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 20,
+    paddingHorizontal: 8,
   },
   voteButton: {
     padding: 6,
@@ -261,14 +278,14 @@ const styles = StyleSheet.create({
     ...FONTS.bold,
     fontSize: 15,
     color: COLORS.secondary,
-    marginHorizontal: 10,
-    minWidth: 35,
+    marginHorizontal: 8,
+    minWidth: 30,
     textAlign: 'center',
   },
   statsText: {
     ...FONTS.medium,
     fontSize: 14,
-    color: '#666',
+    color: '#65676B',
   },
 });
 

@@ -7,8 +7,8 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
-import Header from '../components/common/Header';
 import PostCard from '../components/posts/PostCard';
 import UserCard from '../components/common/UserCard';
 import { COLORS, FONTS } from '../styles/globalStyles';
@@ -21,6 +21,7 @@ const MOCK_POSTS = [
     author: 'johnDoe',
     tags: ['React Native', 'Hooks'],
     upvotes: 25,
+    downvotes: 2,
     comments: 12,
     timestamp: '2h ago',
   },
@@ -30,6 +31,7 @@ const MOCK_POSTS = [
     author: 'techGuru',
     tags: ['Firebase', 'Auth'],
     upvotes: 18,
+    downvotes: 1,
     comments: 8,
     timestamp: '4h ago',
   },
@@ -67,7 +69,7 @@ const MOCK_USERS = [
 
 const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('posts'); // 'posts' or 'users'
+  const [activeTab, setActiveTab] = useState('posts');
   const [searchResults, setSearchResults] = useState([]);
   const [users, setUsers] = useState(MOCK_USERS);
 
@@ -75,7 +77,6 @@ const SearchScreen = ({ navigation }) => {
     setSearchQuery(query);
     
     if (query.trim()) {
-      // Mock search - in real app, this would call Firebase
       if (activeTab === 'posts') {
         const filtered = MOCK_POSTS.filter(
           (post) =>
@@ -118,7 +119,6 @@ const SearchScreen = ({ navigation }) => {
           : user
       )
     );
-    // Update search results if active
     if (searchQuery.trim()) {
       setSearchResults(prevResults =>
         prevResults.map(user =>
@@ -134,35 +134,43 @@ const SearchScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Search"
-        leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-        }
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      
+      {/* Facebook-style Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Search</Text>
+        <View style={styles.placeholder} />
+      </View>
 
       {/* Search Input */}
       <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search posts, users, or tags..."
-          value={searchQuery}
-          onChangeText={handleSearch}
-          autoCapitalize="none"
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity
-            onPress={() => {
-              setSearchQuery('');
-              setSearchResults([]);
-            }}
-          >
-            <Text style={styles.clearButton}>✕</Text>
-          </TouchableOpacity>
-        )}
+        <View style={styles.searchInputWrapper}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search posts, users, or tags..."
+            placeholderTextColor="#B0B3B8"
+            value={searchQuery}
+            onChangeText={handleSearch}
+            autoCapitalize="none"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchQuery('');
+                setSearchResults([]);
+              }}
+            >
+              <Text style={styles.clearButton}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       {/* Tab Selector */}
@@ -198,7 +206,7 @@ const SearchScreen = ({ navigation }) => {
       {/* Search Results */}
       {searchQuery.trim() === '' ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>🔍</Text>
+          <Text style={styles.emptyIcon}>🔍</Text>
           <Text style={styles.emptyTitle}>Start Searching</Text>
           <Text style={styles.emptySubtext}>
             Find posts, users, or topics you're interested in
@@ -206,7 +214,7 @@ const SearchScreen = ({ navigation }) => {
         </View>
       ) : searchResults.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>😞</Text>
+          <Text style={styles.emptyIcon}>😞</Text>
           <Text style={styles.emptyTitle}>No Results Found</Text>
           <Text style={styles.emptySubtext}>
             Try searching with different keywords
@@ -241,36 +249,76 @@ const SearchScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.lightGray,
   },
-  searchContainer: {
+  header: {
+    height: 110,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    backgroundColor: COLORS.background,
+    paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  backIcon: {
+    ...FONTS.bold,
+    fontSize: 28,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    ...FONTS.bold,
+    fontSize: 24,
+    color: COLORS.secondary,
+    flex: 1,
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
+  },
+  searchContainer: {
     padding: 16,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
+  searchInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    height: 40,
+  },
   searchIcon: {
-    fontSize: 18,
+    fontSize: 16,
     marginRight: 8,
   },
   searchInput: {
     flex: 1,
-    height: 40,
-    backgroundColor: COLORS.lightGray,
-    borderRadius: 20,
-    paddingHorizontal: 16,
     ...FONTS.regular,
-    fontSize: 16,
+    fontSize: 15,
+    color: COLORS.secondary,
   },
   clearButton: {
     fontSize: 18,
-    color: '#999',
-    marginLeft: 8,
-    paddingHorizontal: 8,
+    color: '#65676B',
+    paddingHorizontal: 4,
   },
   tabContainer: {
     flexDirection: 'row',
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -280,28 +328,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   activeTab: {
-    borderBottomWidth: 2,
+    borderBottomWidth: 3,
     borderBottomColor: COLORS.primary,
   },
   tabText: {
     ...FONTS.medium,
-    fontSize: 16,
-    color: '#666',
+    fontSize: 15,
+    color: '#65676B',
   },
   activeTabText: {
     color: COLORS.primary,
   },
   resultsList: {
-    padding: 16,
+    padding: 8,
+    paddingBottom: 100,
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: 40,
   },
-  emptyText: {
-    fontSize: 48,
+  emptyIcon: {
+    fontSize: 64,
     marginBottom: 16,
   },
   emptyTitle: {
@@ -313,13 +362,8 @@ const styles = StyleSheet.create({
   emptySubtext: {
     ...FONTS.regular,
     fontSize: 14,
-    color: '#666',
+    color: '#65676B',
     textAlign: 'center',
-  },
-  backButton: {
-    ...FONTS.bold,
-    fontSize: 24,
-    color: COLORS.primary,
   },
 });
 
